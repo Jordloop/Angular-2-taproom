@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Keg } from './keg.model';
 
 @Component({
@@ -6,7 +6,7 @@ import { Keg } from './keg.model';
   template: `
   <ul>
     <li *ngFor="let currentKeg of childKegs">Beer: {{currentKeg.name}} <span [class] = "checkIfEmpty(currentKeg)">Pints Left:{{currentKeg.pintsLeft}} </span>
-    <button (click)="editKeg(currentKeg)">Edit Keg</button>
+    <button (click)="editButtonHasBeenClicked(currentKeg)">Edit Keg</button>
     <button (click)="servePint(currentKeg)">Serve Pint</button></li>
   </ul>
   `
@@ -14,17 +14,11 @@ import { Keg } from './keg.model';
 
 export class KegListComponent {
   @Input() childKegs: Keg[];
+  @Output() clickSender = new EventEmitter();
 
-  selectedKeg = null;
-
-  finishedEditing() {
-    this.selectedKeg = null;
+  editButtonHasBeenClicked(kegToEdit: Keg){
+    this.clickSender.emit(kegToEdit);
   }
-
-  editKeg(clickedKeg){
-    this.selectedKeg = clickedKeg;
-  }
-
 
   servePint(clickedKeg){
     clickedKeg.pintsLeft = clickedKeg.pintsLeft -1;

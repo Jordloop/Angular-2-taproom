@@ -7,8 +7,9 @@ import { Keg } from './keg.model';
     <div class = "jumbotron">
       <h2>Hunter's Brewery!!!!</h2> <small>and jordan is here too i guess...</small>
     </div>
-    <keg-list [childKegs] = "masterKegs"><keg-list>
-
+    <keg-list [childKegs] = "masterKegs" (clickSender)="editKeg($event)"></keg-list>
+    <keg-edit [childSelectedKeg] = "selectedKeg" (clickDoneEditing)="finishedEditing()"></keg-edit>
+    <keg-add></keg-add>
   `
 })
 
@@ -21,12 +22,12 @@ export class AppComponent {
 
   selectedKeg = null;
 
-  finishedEditing() {
-    this.selectedKeg = null;
-  }
-
   editKeg(clickedKeg){
     this.selectedKeg = clickedKeg;
   }
+
+  finishedEditing() {
+  this.selectedKeg = null;
+}
 
 }
