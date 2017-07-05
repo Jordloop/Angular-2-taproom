@@ -8,9 +8,19 @@ import { Component } from '@angular/core';
     </div>
     <div>
       <ul>
-        <li *ngFor="let currentKeg of kegs"> {{currentKeg.name}}<button (click)="viewKeg()">View Keg</button><button (click)="editKeg()">Edit Keg</button><button (click)="servePint()">Serve Pint</button></li>
+        <li [class] = "checkIfEmpty(currentKeg)" *ngFor="let currentKeg of kegs">Beer: {{currentKeg.name}} Pints Lift: {{currentKeg.pintsLeft}}<button (click)="viewKeg(currentKeg)">View Keg</button><button (click)="editKeg(currentKeg)">Edit Keg</button><button (click)="servePint(currentKeg)">Serve Pint</button></li>
       </ul>
     </div>
+    <h3>Edit Keg</h3>
+    <label for="name">Edit Name:</label>
+    <input [(ngModel)]="selectedKeg.name">
+    <label for="brand">Edit Brand:</label>
+    <input [(ngModel)]="selectedKeg.brand">
+    <label for="alcoholContent">Edit AC:</label>
+    <input [(ngModel)]="selectedKeg.alcoholContent">>
+    <label for="beerPrice">Edit price:</label>
+    <input [(ngModel)]="selectedKeg.price">
+    <button type="submit" name="button">EDIT!</button>
   `
 })
 
@@ -20,15 +30,34 @@ export class AppComponent {
     new Keg('Nud ', 'brand2', 6.50, '6.8%'),
     new Keg('Yucky', 'brand3', 6.00, '8.8%')
   ];
+  selectedKeg: Keg = this.kegs[0];
 
-  editKeg(){
-    alert("EDITED!");
+  editKeg(clickedKeg){
+    this.selectedKeg = clickedKeg;
   }
 
-  viewKeg(){
+  viewKeg(clickedKeg){
     alert("VIEWED!");
   }
 
+  servePint(clickedKeg){
+    clickedKeg.pintsLeft = clickedKeg.pintsLeft -1;
+    console.log(clickedKeg.pintsLeft);
+
+  }
+
+  checkIfEmpty(clickedKeg){
+    if(clickedKeg.pintsLeft <= 10){
+      return "bg-danger";
+    }
+    else if (clickedKeg.pintsLeft <= 50){
+      return "bg-warning";
+    }
+    else {
+      return "bg-info";
+    }
+
+  }
 }
 
 
@@ -38,8 +67,4 @@ export class Keg {
   public pintsLeft: number = 124;
   constructor(public name: string, public brand: string, public price: number, public alcoholContent: string){ }
 
-  servePint(){
-    this.pintsLeft = this.pintsLeft -1;
-    console.log(this.pintsLeft);
-  }
 }
