@@ -8,19 +8,23 @@ import { Component } from '@angular/core';
     </div>
     <div>
       <ul>
-        <li [class] = "checkIfEmpty(currentKeg)" *ngFor="let currentKeg of kegs">Beer: {{currentKeg.name}} Pints Lift: {{currentKeg.pintsLeft}}<button (click)="viewKeg(currentKeg)">View Keg</button><button (click)="editKeg(currentKeg)">Edit Keg</button><button (click)="servePint(currentKeg)">Serve Pint</button></li>
+        <li *ngFor="let currentKeg of kegs">Beer: {{currentKeg.name}} <span [class] = "checkIfEmpty(currentKeg)">Pints Left:{{currentKeg.pintsLeft}} </span>
+        <button (click)="editKeg(currentKeg)">Edit Keg</button>
+        <button (click)="servePint(currentKeg)">Serve Pint</button></li>
       </ul>
     </div>
-    <h3>Edit Keg</h3>
-    <label for="name">Edit Name:</label>
-    <input [(ngModel)]="selectedKeg.name">
-    <label for="brand">Edit Brand:</label>
-    <input [(ngModel)]="selectedKeg.brand">
-    <label for="alcoholContent">Edit AC:</label>
-    <input [(ngModel)]="selectedKeg.alcoholContent">>
-    <label for="beerPrice">Edit price:</label>
-    <input [(ngModel)]="selectedKeg.price">
-    <button type="submit" name="button">EDIT!</button>
+    <div *ngIf="selectedKeg">
+      <h3>Edit Keg</h3>
+      <label for="name">Edit Name:</label>
+      <input [(ngModel)]="selectedKeg.name">
+      <label for="brand">Edit Brand:</label>
+      <input [(ngModel)]="selectedKeg.brand">
+      <label for="alcoholContent">Edit AC:</label>
+      <input [(ngModel)]="selectedKeg.alcoholContent">>
+      <label for="beerPrice">Edit price:</label>
+      <input [(ngModel)]="selectedKeg.price">
+      <button (click)="finishedEditing()">ED-IT!</button>
+    </div>
   `
 })
 
@@ -30,15 +34,17 @@ export class AppComponent {
     new Keg('Nud ', 'brand2', 6.50, '6.8%'),
     new Keg('Yucky', 'brand3', 6.00, '8.8%')
   ];
-  selectedKeg: Keg = this.kegs[0];
+
+  selectedKeg = null;
+
+  finishedEditing() {
+    this.selectedKeg = null;
+  }
 
   editKeg(clickedKeg){
     this.selectedKeg = clickedKeg;
   }
 
-  viewKeg(clickedKeg){
-    alert("VIEWED!");
-  }
 
   servePint(clickedKeg){
     clickedKeg.pintsLeft = clickedKeg.pintsLeft -1;
@@ -50,14 +56,7 @@ export class AppComponent {
     if(clickedKeg.pintsLeft <= 10){
       return "bg-danger";
     }
-    else if (clickedKeg.pintsLeft <= 50){
-      return "bg-warning";
-    }
-    else {
-      return "bg-info";
-    }
-
-  }
+ }
 }
 
 
